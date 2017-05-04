@@ -1,0 +1,48 @@
+<html>
+<body>
+<pre>
+    Hello VM.
+</pre>
+<div>
+    ##这是一行注释
+    ##${key1} <br />
+    ##${key2} <br />
+    ##$!{key3}
+
+    <ul>
+        #foreach ($color in $colors)
+            <li>
+                ${color} at index = ${foreach.index}, count = ${foreach.count}
+            </li>
+        #end
+    </ul>
+
+    <ul>
+        #foreach($entry in $map.entrySet())
+            <li>key: $entry.key, value:$entry.value, index: $foreach.index</li>
+        #end
+
+    </ul>
+
+    MyUser: $!{user.getUsername()}  <br/>
+
+    #set($title = "nowcoder")
+    Include:  <br />
+        #include("header.vm")
+    Parse:  <br />
+        #parse("header.vm")
+
+    #macro (rederColor $color $index)
+        Color drawn by macro: $color, index = $index
+    #end
+
+    test my macro:
+            #foreach ($color in $colors)
+                <div>
+                    #rederColor($color $foreach.index)
+                </div>
+            #end
+
+</div>
+</body>
+</html>
