@@ -25,15 +25,17 @@ public class InitDataBaseTests {
     NewsDao newsDao;
 	@Test
 	public void contextLoads() {
+
 	    Random random = new Random();
-//        for (int i = 0; i < 11; i++) {
-//            User user = new User(String.format("USER%d",i), "", "",
-//                    String.format("http://images.nowcoder.com/head/%dt", random.nextInt(1000)));
-//            userDao.addUser(user);
-//
-//            user.setPassword("1234");
-//            userDao.update(user);
-//        }
+
+        for (int i = 0; i < 11; i++) {
+            User user = new User(String.format("USER%d",i), "", "",
+                    String.format("http://images.nowcoder.com/head/%dt.png", random.nextInt(1000)));
+            userDao.addUser(user);
+
+            user.setPassword("1234");
+            userDao.update(user);
+        }
 //        Assert.assertEquals("987654321",userDao.selectByUid(1).getPassword());
 //        userDao.deleteByUid(1);
 //        Assert.assertNull(userDao.selectByUid(1));
@@ -42,11 +44,11 @@ public class InitDataBaseTests {
             News news = new News();
             news.setTitle(String.format("Headline-%d", i));
             news.setLink(String.format("http://news.nowcoder.com/%d", i));
-            news.setImage(String.format("http://images.nowcoder.com/news/%d", i));
+            news.setImage(String.format("http://images.nowcoder.com/head/%dm.png", i));
             news.setLikeCount(i*10);
             news.setCommentCount(i*3);
             Date date = new Date();
-            date.setTime(date.getTime() + 1000*3600*i);  //每个新闻间隔一个小时
+            date.setTime(date.getTime() + 12*1000*3600*i);  //每个新闻间隔12个小时
             news.setCreatedDate(date);
             news.setUid(i+1);
 

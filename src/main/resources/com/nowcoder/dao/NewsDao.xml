@@ -12,7 +12,7 @@
         <if test="uid != 0">
             where uid = #{uid}
         </if>
-        order by nid desc
+        order by created_date desc
         limit #{offset}, #{limit}
     </select>
 </mapper>

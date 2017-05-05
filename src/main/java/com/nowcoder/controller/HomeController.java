@@ -8,6 +8,7 @@ import com.nowcoder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,6 +27,17 @@ public class HomeController {
     @Autowired
     NewsService newsService;
 
+    private List<ViewObject> getNews(int uid, int offset, int limit) {
+        List<News> newsList = newsService.getLatestNews(uid, offset, limit);
+        List<ViewObject> vos = new ArrayList<ViewObject>();
+        for (News aNews:newsList) {
+            ViewObject vo = new ViewObject();
+            vo.set("news", aNews);
+            vo.set("user", userService.getUser(aNews.getUid()));
+            vos.add(vo);
+        }
+        return vos;
+    }
     /**
      * 这种index指向某个网页的, 不要加ResponseBody,
      * 那个代表的是return后面的部分是text类型的body.
@@ -35,15 +47,13 @@ public class HomeController {
      */
     @RequestMapping(path = {"/", "/index"})
     public String index(Model model) {
-        List<News> newsList = newsService.getLatestNews(0, 0, 10);
-        List<ViewObject> vos = new ArrayList<ViewObject>();
-        for (News aNews:newsList) {
-            ViewObject vo = new ViewObject();
-            vo.set("news", aNews);
-            vo.set("user", userService.getUser(aNews.getUid()));
-            vos.add(vo);
-        }
-        model.addAttribute("vos", vos);
+        model.addAttribute("vos", getNews(0, 0, 10));
+        return "home";
+    }
+
+    @RequestMapping(path = {"/userIndex/{uid}"})
+    public String userIndex(Model model, @PathVariable("uid") int uid) {
+        model.addAttribute("vos", getNews(uid, 0, 10));
         return "home";
     }
 
