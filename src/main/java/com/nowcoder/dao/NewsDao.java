@@ -25,5 +25,13 @@ public interface NewsDao {
     @Delete({"delete from ", TABLE_NAME, "where nid = #{nid}"})
     void deleteByNid(int nid);
 
+    /**
+     * 通过uid, offset, limit来进行新闻的查询
+     * 借助xml实现, 其中#{uid}等的调用和简易注解唯一的区别在于: 需要在形参列表中进行@Param声明
+     * @param uid
+     * @param offset
+     * @param limit
+     * @return
+     */
     List<News> selectByUidAndOffset(@Param("uid") int uid, @Param("offset") int offset, @Param("limit") int limit);
 }

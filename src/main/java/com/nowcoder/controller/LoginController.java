@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -38,11 +39,18 @@ public class LoginController {
     public String register(Model model,
                            @RequestParam("username") String username,
                            @RequestParam("password") String password,
-                           @RequestParam(name = "rember", defaultValue = "0") String rememberMe,
+                           @RequestParam(name = "rember", defaultValue = "0") int rememberMe,
                            HttpServletResponse response) {
         try {
             Map<String, Object> map =  userService.register(username, password);
-            if (map.isEmpty()) {
+            if (map.containsKey("ticket")) {
+                //设置coockie
+                Cookie cookie = new Cookie("ticket", map.get("ticket").toString());  //what
+                cookie.setPath("/");  //where
+                if (rememberMe > 0) {
+                    cookie.setMaxAge(3600 * 24 * 7);  //when
+                }
+                response.addCookie(cookie);
                 return ToutiaoUtil.getJSONString(0, "用户注册成功");
             } else {
                 return ToutiaoUtil.getJSONString(-1, map);
@@ -58,18 +66,25 @@ public class LoginController {
     public String login(Model model,
                            @RequestParam("username") String username,
                            @RequestParam("password") String password,
-                           @RequestParam(name = "rember", defaultValue = "0") String rememberMe,
+                           @RequestParam(name = "rember", defaultValue = "0") int rememberMe,
                            HttpServletResponse response) {
         try {
-            Map<String, Object> map =  userService.register(username, password);
-            if (map.isEmpty()) {
-                return ToutiaoUtil.getJSONString(0, "用户注册成功");
+            Map<String, Object> map =  userService.login(username, password);
+            if (map.containsKey("ticket")) {
+                //设置coockie
+                Cookie cookie = new Cookie("ticket", map.get("ticket").toString());  //what
+                cookie.setPath("/");  //where
+                if (rememberMe > 0) {  //用户登录的时候要求rememberMe
+                    cookie.setMaxAge(3600 * 24 * 7);  //when
+                }
+                response.addCookie(cookie);
+                return ToutiaoUtil.getJSONString(0, "用户登录成功");
             } else {
                 return ToutiaoUtil.getJSONString(-1, map);
             }
         } catch (Exception e) {
-            logger.error("注册出错" + e.getMessage());
-            return ToutiaoUtil.getJSONString(-1, "用户注册异常");
+            logger.error("登录出错" + e.getMessage());
+            return ToutiaoUtil.getJSONString(-1, "用户登录异常");
         }
     }
 

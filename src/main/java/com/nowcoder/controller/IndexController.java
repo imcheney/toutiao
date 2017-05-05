@@ -81,7 +81,7 @@ public class IndexController {
                            HttpServletResponse response
                            ) {
         //允许用户自己设置cookie
-        response.addCookie(new Cookie(key, value));
+        response.addCookie(new Cookie(key, value));  //记住, 加Cookie的方法
         //允许用户自己设置header
         response.addHeader(key, value);
         return "NowcoderId from this cookie is:" + nowcoderId;
