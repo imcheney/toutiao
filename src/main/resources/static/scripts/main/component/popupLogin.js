@@ -1,3 +1,6 @@
+/**
+ * login窗口的js代码
+ */
 (function (window) {
     var PopupLogin = Base.createClass('main.component.PopupLogin');
     var Popup = Base.getClass('main.component.Popup');

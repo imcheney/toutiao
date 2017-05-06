@@ -1,4 +1,8 @@
 /**
+ * upload上传窗口
+ */
+
+/**
 var oPopupUpload = new PopupUpload({
     
 });
@@ -74,7 +78,7 @@ var oPopupUpload = new PopupUpload({
                 }
                 that.requesting = true;
                 $.ajax({
-                    url: '/user/addNews/',
+                    url: '/user/addNews',
                     method: 'post',
                     data: {image: that.image, title: sTitle, link: sLink},
                     dataType: 'json'

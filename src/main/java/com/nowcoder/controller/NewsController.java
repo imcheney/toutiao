@@ -73,7 +73,7 @@ public class NewsController {
         }
     }
 
-    @RequestMapping(value = {"/addNews"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/addNews", "/addNews/", "/user/addNews"}, method = {RequestMethod.POST})
     @ResponseBody
     public String addNews(@RequestParam("image") String image,
                         @RequestParam("title") String title,
