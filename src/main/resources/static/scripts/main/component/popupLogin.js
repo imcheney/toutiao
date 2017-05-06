@@ -50,7 +50,7 @@
                 }
                 var oData = that.val();
                 $.ajax({
-                    url: '/login/',
+                    url: '/login',
                     type: 'post',
                     dataType: 'json',
                     data: {
@@ -81,7 +81,7 @@
                 }
                 var oData = that.val();
                 $.ajax({
-                    url: '/reg/',
+                    url: '/register',
                     type: 'post',
                     dataType: 'json',
                     data: {

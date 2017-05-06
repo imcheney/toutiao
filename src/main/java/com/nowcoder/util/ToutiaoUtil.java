@@ -14,7 +14,9 @@ import java.util.Map;
  */
 public class ToutiaoUtil {
     private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtil.class);
-
+    private static final String[] ALLOWED_IMAGE_FORMATS = new String[] {"jpg", "jpeg", "png"};
+    public static final String IMAGE_DIR = "/Users/Chen/Downloads/temp/toutiaoImage/";
+    public static final String TOUTIAO_DOMAIN = "http://127.0.0.1:8080/";
     /**
      * 把运行结果的code做成json返回
      * 0: ok, 其他: 有问题
@@ -86,5 +88,14 @@ public class ToutiaoUtil {
             logger.error("生成MD5失败", e);
             return null;
         }
+    }
+
+    public static boolean checkImageFormat(String ext) {
+        for (String format:ALLOWED_IMAGE_FORMATS) {
+            if (ext.toLowerCase().equals(format)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

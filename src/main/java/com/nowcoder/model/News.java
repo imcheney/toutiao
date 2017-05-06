@@ -15,6 +15,15 @@ public class News {
     private Date createdDate;
     private int uid;
 
+    public News() {
+    }
+
+    public News(String title, String link, String image) {
+        this.title = title;
+        this.link = link;
+        this.image = image;
+    }
+
     public int getNid() {
         return nid;
     }

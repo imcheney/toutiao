@@ -40,21 +40,26 @@ public class PassportInterceptor implements HandlerInterceptor{
      */
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        System.out.println("entering preHandle interceptor...");
         String ticket = null;
-        Cookie[] cookies = httpServletRequest.getCookies();
-        for (Cookie cookie:cookies) {
-            if (cookie.getName().equals("ticket")) {
-                ticket = cookie.getValue();
-                break;
+        if (httpServletRequest.getCookies()!=null) {
+            Cookie[] cookies = httpServletRequest.getCookies();
+            for (Cookie cookie:cookies) {
+                if (cookie.getName().equals("ticket")) {
+                    ticket = cookie.getValue();
+                    break;
+                }
             }
         }
         //check if ticket is valid
-        LoginTicket loginTicket = loginTicketDao.selectByTicket(ticket);
-        if (loginTicket==null || loginTicket.getStatus()!=0 || loginTicket.getExpired().before(new Date())) {
-            return true;  //跳过用户设置阶段
-        } else {  //用户ticket验证成功, 设置已登录效果
-            User user = userDao.selectByUid(loginTicket.getUid());
-            hostHolder.setUser(user);  //装入user, 实现全局访问
+        if (ticket!=null) {
+            LoginTicket loginTicket = loginTicketDao.selectByTicket(ticket);
+            if (loginTicket==null || loginTicket.getStatus()!=0 || loginTicket.getExpired().before(new Date())) {
+                return true;  //跳过用户设置阶段
+            } else {  //用户ticket验证成功, 设置已登录效果
+                User user = userDao.selectByUid(loginTicket.getUid());
+                hostHolder.setUser(user);  //装入user, 实现全局访问
+            }
         }
         return true;
     }

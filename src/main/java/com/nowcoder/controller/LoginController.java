@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -86,6 +83,12 @@ public class LoginController {
             logger.error("登录出错" + e.getMessage());
             return ToutiaoUtil.getJSONString(-1, "用户登录异常");
         }
+    }
+
+    @RequestMapping(path = {"/logout"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String logout(@CookieValue("ticket")String ticket) {  //get ticket from cookies out of request
+        userService.logout(ticket);
+        return "redirect:/";
     }
 
 }

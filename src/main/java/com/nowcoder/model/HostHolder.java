@@ -1,8 +1,11 @@
 package com.nowcoder.model;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Created by Chen on 05/05/2017.
  */
+@Component
 public class HostHolder {
     private static ThreadLocal<User> onSiteUser = new ThreadLocal<User>();
 
