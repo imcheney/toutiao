@@ -1,11 +1,14 @@
 package com.nowcoder;
 
+import com.nowcoder.dao.CommentDao;
 import com.nowcoder.dao.LoginTicketDao;
 import com.nowcoder.dao.NewsDao;
 import com.nowcoder.dao.UserDao;
+import com.nowcoder.model.Comment;
 import com.nowcoder.model.LoginTicket;
 import com.nowcoder.model.News;
 import com.nowcoder.model.User;
+import com.nowcoder.util.EntityType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,13 +32,33 @@ public class InitDataBaseTests {
     @Autowired
     LoginTicketDao loginTicketDao;
 
+    @Autowired
+    CommentDao commentDao;
+
 	@Test
 	public void contextLoads() {
         //testUser();
         //testNews();
         //testLoginTicket();
-        loginTicketDao.updateStatus("Ticket3", -1);
-        Assert.assertEquals(loginTicketDao.selectByTicket("Ticket3").getStatus(), -1);
+//        loginTicketDao.updateStatus("Ticket3", -1);
+//        Assert.assertEquals(loginTicketDao.selectByTicket("Ticket3").getStatus(), -1);
+        testComment();
+        System.out.println((commentDao.selectByEntity(2,1)).get(0).getContent());
+    }
+
+    private void testComment() {
+        for (int i=1; i<=10; i++) {
+            Comment comment = new Comment();
+            comment.setEntityId(i+1);
+            comment.setUid(i+1);
+            comment.setEntityType(EntityType.NEWS);
+            comment.setContent(String.format("I really like this article %d!!!", i));
+            comment.setCreatedDate(new Date());
+            comment.setStatus(0);
+            commentDao.addComment(comment);
+            comment.setContent(String.format("Hey, I don't think the article is right %d ~~", i));
+            commentDao.addComment(comment);
+        }
     }
 
     private void testLoginTicket() {

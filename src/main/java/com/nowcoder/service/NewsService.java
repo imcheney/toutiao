@@ -42,10 +42,15 @@ public class NewsService {
         }
     }
 
-    public void getImage(MultipartFile filename) {
-    }
-
     public void addNews(News news) {
         newsDao.addNews(news);
+    }
+
+    public News getNewsByNid(int nid) {
+        return newsDao.selectByNid(nid);
+    }
+
+    public void updateCommentCount(int count, int nid) {
+        newsDao.updateCommentCount(count, nid);
     }
 }

@@ -1,10 +1,7 @@
 package com.nowcoder.dao;
 
 import com.nowcoder.model.News;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
 public interface NewsDao {
     String TABLE_NAME = "toutiao_news";
     String INSERT_FIELDS = " title, link, image, like_count, comment_count, created_date, uid ";
-    String SELECT_FIELDS = " nid" + INSERT_FIELDS;
+    String SELECT_FIELDS = " nid, " + INSERT_FIELDS;
 
     @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS, ") " +
             "values (#{title}, #{link}, #{image}, #{likeCount}, #{commentCount}, #{createdDate}, #{uid})"})
@@ -27,11 +24,17 @@ public interface NewsDao {
 
     /**
      * 通过uid, offset, limit来进行新闻的查询
-     * 借助xml实现, 其中#{uid}等的调用和简易注解唯一的区别在于: 需要在形参列表中进行@Param声明
+     * 借助xml实现, 其中#{uid}等由于有大于等于两个参数, 需要在形参列表中进行@Param声明
      * @param uid
      * @param offset
      * @param limit
      * @return
      */
     List<News> selectByUidAndOffset(@Param("uid") int uid, @Param("offset") int offset, @Param("limit") int limit);
+
+    @Select({"select " + SELECT_FIELDS + " from " + TABLE_NAME + " where nid = #{nid}"})
+    News selectByNid(int nid);
+
+    @Update({"update " + TABLE_NAME + " set comment_count = #{count} where nid = #{nid}"})
+    void updateCommentCount(@Param("count") int count, @Param("nid") int nid);
 }
