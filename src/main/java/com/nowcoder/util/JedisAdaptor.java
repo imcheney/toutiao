@@ -1,5 +1,7 @@
 package com.nowcoder.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -9,12 +11,14 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Tuple;
 
+import java.util.List;
+
 /**
  * 运用Jedis的类
  * Created by Chen on 08/05/2017.
  */
 @Service
-public class JedisAdaptor implements InitializingBean{
+public class JedisAdaptor implements InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(JedisAdaptor.class);
     private JedisPool pool = null;  //线程池
 
@@ -26,87 +30,11 @@ public class JedisAdaptor implements InitializingBean{
         }
     }
 
-    /*配置线程池*/
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("localhost", 6379);
-    }
-
-    /**
-     * 获取jedis线程
-     * @return
-     */
-    public Jedis getJedis() {
-        return pool.getResource();
-    }
-
-    public long sadd(String set, String member) {
-        Jedis jedis = null;  //函数栈中的jedis数据库线程
-        try {
-            jedis = getJedis();
-            return jedis.sadd(set, member);
-        } catch (Exception e) {
-            logger.error("sadd发生异常" + e.getMessage());
-            e.printStackTrace();
-            return 0;
-        } finally {
-            if (jedis!=null) {
-                jedis.close();
-            }
-        }
-    }
-
-    public long srem(String set, String member) {
-        Jedis jedis = null;  //函数栈中的jedis数据库线程
-        try {
-            jedis = getJedis();
-            return jedis.srem(set, member);
-        } catch (Exception e) {
-            logger.error("srem发生异常" + e.getMessage());
-            e.printStackTrace();
-            return 0;
-        } finally {
-            if (jedis!=null) {
-                jedis.close();
-            }
-        }
-    }
-
-    public boolean sismember(String set, String member) {
-        Jedis jedis = null;  //函数栈中的jedis数据库线程
-        try {
-            jedis = getJedis();
-            return jedis.sismember(set, member);
-        } catch (Exception e) {
-            logger.error("srem发生异常" + e.getMessage());
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (jedis!=null) {
-                jedis.close();
-            }
-        }
-    }
-
-    public long scard(String set) {
-        Jedis jedis = null;
-        try {
-            jedis = getJedis();
-            return jedis.scard(set);
-        } catch (Exception e) {
-            logger.error("scard发生异常" + e.getMessage());
-            return -1;
-        } finally {
-            if (jedis!=null) {
-                jedis.close();
-            }
-        }
-    }
-
     /*两个测试方法*/
     public static void print(int index, Object obj) {
         System.out.println(String.format("%d, %s", index, obj));
     }
+
     public static void main(String[] args) {
         System.out.println("========================BASIC=======================");
         Jedis jedis = new Jedis();
@@ -115,11 +43,10 @@ public class JedisAdaptor implements InitializingBean{
         print(1, jedis.get("hello"));
         jedis.rename("hello", "yello");
         print(1, jedis.get("yello"));
-
         //验证码等时效性临时数据场景, 可以使用setex, ttl等来做
         jedis.setex("valid", 15, "test123");
         print(2, jedis.ttl("valid"));
-        jedis.set("pv","100");
+        jedis.set("pv", "100");
         jedis.incr("pv");
         print(2, jedis.get("pv"));
         jedis.incrBy("pv", 10);
@@ -137,7 +64,7 @@ public class JedisAdaptor implements InitializingBean{
         print(3, jedis.lrange(lista, 0, -1));
         print(4, jedis.llen(lista));
         print(5, jedis.lpop(lista));
-        print(6,jedis.lindex(lista, 3));
+        print(6, jedis.lindex(lista, 3));
         print(7, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test1"));
         print(8, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test0"));
         print(9, jedis.lrange(lista, 0, -1));
@@ -162,9 +89,9 @@ public class JedisAdaptor implements InitializingBean{
         /*set*/
         System.out.println("================SET===============");
         String s1 = "set01", s2 = "set02";
-        for (int i = 1; i <= 5 ; i++) {
-            jedis.sadd(s1, i+"");
-            jedis.sadd(s2, i*i+"");
+        for (int i = 1; i <= 5; i++) {
+            jedis.sadd(s1, i + "");
+            jedis.sadd(s2, i * i + "");
         }
         print(1, jedis.smembers(s1));
         print(1, jedis.smembers(s2));
@@ -173,9 +100,9 @@ public class JedisAdaptor implements InitializingBean{
         print(2, jedis.sdiff(s1, s2));  //s1-s2
         print(2, jedis.sdiff(s2, s1));  //s2-s1
         print(3, jedis.sismember(s1, "5"));
-        print(3,jedis.scard(s1));
+        print(3, jedis.scard(s1));
         print(4, jedis.srem(s1, "5"));
-        print(5,jedis.scard(s1));
+        print(5, jedis.scard(s1));
         print(5, jedis.sismember(s1, "5"));
         print(6, jedis.smembers(s1));
 
@@ -188,16 +115,15 @@ public class JedisAdaptor implements InitializingBean{
         jedis.zadd(pq, 85, "Chenwei");
         jedis.zadd(pq, 82, "Alison");
         print(1, jedis.zcard(pq));
-        print(2, jedis.zcount(pq, 80,90));
-        print(3, jedis.zscore(pq,"Alison"));
-        print(4, jedis.zincrby(pq, 2,"Alison"));
+        print(2, jedis.zcount(pq, 80, 90));
+        print(3, jedis.zscore(pq, "Alison"));
+        print(4, jedis.zincrby(pq, 2, "Alison"));
         print(5, jedis.zrange(pq, 0, 2));
-        print(5, jedis.zrevrange(pq,1,2));
-
+        print(5, jedis.zrevrange(pq, 1, 2));
         print(5, jedis.zrank(pq, "Alison"));
         print(5, jedis.zrevrank(pq, "Alison"));
         //THIS IS SPECIAL
-        for (Tuple tuple:jedis.zrangeByScoreWithScores(pq, 80,90)) {
+        for (Tuple tuple : jedis.zrangeByScoreWithScores(pq, 80, 90)) {
             print(6, tuple.getElement() + ": " + tuple.getScore());
         }
 
@@ -209,6 +135,172 @@ public class JedisAdaptor implements InitializingBean{
             j.get("a");
             System.out.println("POOL" + i);
             j.close();
+        }
+    }
+
+    /*配置线程池*/
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        pool = new JedisPool("localhost", 6379);
+    }
+
+    /**
+     * 获取jedis线程
+     *
+     * @return
+     */
+    public Jedis getJedis() {
+        return pool.getResource();
+    }
+
+    public long sadd(String set, String member) {
+        Jedis jedis = null;  //函数栈中的jedis数据库线程
+        try {
+            jedis = getJedis();
+            return jedis.sadd(set, member);
+        } catch (Exception e) {
+            logger.error("sadd发生异常" + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long srem(String set, String member) {
+        Jedis jedis = null;  //函数栈中的jedis数据库线程
+        try {
+            jedis = getJedis();
+            return jedis.srem(set, member);
+        } catch (Exception e) {
+            logger.error("srem发生异常" + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public boolean sismember(String set, String member) {
+        Jedis jedis = null;  //函数栈中的jedis数据库线程
+        try {
+            jedis = getJedis();
+            return jedis.sismember(set, member);
+        } catch (Exception e) {
+            logger.error("srem发生异常" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long scard(String set) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.scard(set);
+        } catch (Exception e) {
+            logger.error("scard发生异常" + e.getMessage());
+            return -1;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public void set(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            jedis.set(key, value);
+        } catch (Exception e) {
+            logger.error("set error..." + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public String get(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.get(key);
+        } catch (Exception e) {
+            logger.error("set error..." + e.getMessage());
+            return null;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    /**
+     * 把Object转换成json String存储在redis中
+     *
+     * @param key
+     * @param object
+     */
+    public void setObject(String key, Object object) {
+        set(key, JSON.toJSONString(object));
+    }
+
+    /**
+     * 把redis中的json String获取并parse成一个java Object
+     * 借助了Class<T>这种特殊的Class类, 允许把Type作为参数放在尖括号中
+     *
+     * @param key   去redis中提取json String的key
+     * @param clazz 一个类, 比如Person.class
+     * @param <T>   Type: 比如Person, String
+     * @return
+     */
+    public <T> T getObject(String key, Class<T> clazz) {
+        String value = get(key);
+        if (value != null) {
+            return JSON.parseObject(value, clazz);
+        } else {
+            return null;
+        }
+    }
+
+    public long lpush(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("lpush error..." + e.getMessage());
+            return -1;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    //note: A timeout of zero can be used to block indefinitely.
+    public List<String> brpop(int timeout, String key) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.brpop(timeout, key);
+        } catch (Exception e) {
+            logger.error("brpop error..." + e.getMessage());
+            return null;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 }

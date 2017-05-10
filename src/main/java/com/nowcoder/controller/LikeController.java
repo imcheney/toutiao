@@ -1,5 +1,8 @@
 package com.nowcoder.controller;
 
+import com.nowcoder.async.EventModel;
+import com.nowcoder.async.EventProducer;
+import com.nowcoder.async.EventType;
 import com.nowcoder.model.HostHolder;
 import com.nowcoder.service.LikeService;
 import com.nowcoder.service.NewsService;
@@ -29,6 +32,8 @@ public class LikeController {
     NewsService newsService;
     @Autowired
     HostHolder hostHolder;
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/like"})
     @ResponseBody
@@ -38,6 +43,11 @@ public class LikeController {
             long likeCount = likeService.addLike(uid, EntityType.NEWS, nid);
             logger.info("likeCount: " + likeCount);
             newsService.updateLikeCount((int)likeCount, nid);
+
+            eventProducer.fireEvent(new EventModel(EventType.LIKE).setActorId(hostHolder.getUser().getUid())
+                    .setEntityOwnerId(newsService.getNewsByNid(nid).getUid())
+                    .setEntityId(nid).setEntityType(EntityType.NEWS));
+
             return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
         } catch (Exception e) {
             logger.error("like添加失败" + e.getMessage());

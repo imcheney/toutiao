@@ -10,6 +10,7 @@ public class RedisKeyUtil {  //util类一般都使用静态方法, 因此成员�
     private static String SEPARATOR = ":";
     private static String BIZ_LIKE = "LIKE";
     private static String BIZ_DISLIKE = "DISLIKE";
+    private static String BIZ_EVENT = "EVENT";
 
     public static String getLikeKey(int entityType, int entityId) {
         return BIZ_LIKE + SEPARATOR + String.valueOf(entityType) + SEPARATOR + String.valueOf(entityId);
@@ -19,6 +20,7 @@ public class RedisKeyUtil {  //util类一般都使用静态方法, 因此成员�
         return BIZ_DISLIKE + SEPARATOR + String.valueOf(entityType) + SEPARATOR + String.valueOf(entityId);
     }
 
-
-
+    public static String getEventQueueKey() {
+        return BIZ_EVENT;
+    }
 }
