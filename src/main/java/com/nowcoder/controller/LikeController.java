@@ -1,0 +1,61 @@
+package com.nowcoder.controller;
+
+import com.nowcoder.model.HostHolder;
+import com.nowcoder.service.LikeService;
+import com.nowcoder.service.NewsService;
+import com.nowcoder.service.UserService;
+import com.nowcoder.util.EntityType;
+import com.nowcoder.util.ToutiaoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/**
+ * Created by Chen on 09/05/2017.
+ */
+@Controller
+public class LikeController {
+    private static final Logger logger = LoggerFactory.getLogger(LikeController.class);
+
+    @Autowired
+    LikeService likeService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    NewsService newsService;
+    @Autowired
+    HostHolder hostHolder;
+
+    @RequestMapping(path = {"/like"})
+    @ResponseBody
+    public String like(@RequestParam("nid") int nid) {
+        try {
+            int uid = hostHolder.getUser().getUid();
+            long likeCount = likeService.addLike(uid, EntityType.NEWS, nid);
+            logger.info("likeCount: " + likeCount);
+            newsService.updateLikeCount((int)likeCount, nid);
+            return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
+        } catch (Exception e) {
+            logger.error("like添加失败" + e.getMessage());
+            return ToutiaoUtil.getJSONString(-1, "like添加失败");
+        }
+    }
+
+    @RequestMapping(path = {"/dislike"})
+    @ResponseBody
+    public String dislike(@RequestParam("nid") int nid) {
+        try {
+            int uid = hostHolder.getUser().getUid();
+            int likeCount = (int) likeService.addDislike(uid, EntityType.NEWS, nid);
+            newsService.updateLikeCount(likeCount, nid);
+            return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
+        } catch (Exception e) {
+            logger.error("dislike设置失败" + e.getMessage());
+            return ToutiaoUtil.getJSONString(-1, "dislike设置失败");
+        }
+    }
+}

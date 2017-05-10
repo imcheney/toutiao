@@ -53,4 +53,8 @@ public class NewsService {
     public void updateCommentCount(int count, int nid) {
         newsDao.updateCommentCount(count, nid);
     }
+
+    public void updateLikeCount(int likeCount, int nid) {
+        newsDao.updateLikeCount(likeCount, nid);
+    }
 }

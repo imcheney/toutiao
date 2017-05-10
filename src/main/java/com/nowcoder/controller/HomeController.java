@@ -3,8 +3,10 @@ package com.nowcoder.controller;
 import com.nowcoder.dao.UserDao;
 import com.nowcoder.model.News;
 import com.nowcoder.model.ViewObject;
+import com.nowcoder.service.LikeService;
 import com.nowcoder.service.NewsService;
 import com.nowcoder.service.UserService;
+import com.nowcoder.util.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ public class HomeController {
     @Autowired
     NewsService newsService;
 
+    @Autowired
+    LikeService likeService;
+
     private List<ViewObject> getNews(int uid, int offset, int limit) {
         List<News> newsList = newsService.getLatestNews(uid, offset, limit);
         List<ViewObject> vos = new ArrayList<ViewObject>();
@@ -35,6 +40,8 @@ public class HomeController {
             ViewObject vo = new ViewObject();
             vo.set("news", aNews);
             vo.set("user", userService.getUser(aNews.getUid()));
+            int likeStatus = likeService.getLikeStatus(uid, EntityType.NEWS, aNews.getNid());
+            vo.set("like", likeStatus);
             vos.add(vo);
         }
         return vos;
