@@ -1,6 +1,11 @@
 package com.nowcoder.controller;
 
+import com.nowcoder.async.EventHandler;
+import com.nowcoder.async.EventModel;
+import com.nowcoder.async.EventProducer;
+import com.nowcoder.async.EventType;
 import com.nowcoder.service.UserService;
+import com.nowcoder.util.EntityType;
 import com.nowcoder.util.ToutiaoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -19,9 +26,10 @@ import java.util.Map;
 @Controller
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventProducer eventProducer;
 
     /**
      * 用户注册Controller
@@ -77,6 +85,15 @@ public class LoginController {
                 response.addCookie(cookie);
                 return ToutiaoUtil.getJSONString(0, "用户登录成功");
             } else {
+                String msgType = map.get("msgType").toString();
+                String ExceptionInfo = (String)map.get(msgType);
+                EventModel event = (new EventModel(EventType.LOGIN)).setEntityOwnerId((int)map.get("uid"))
+                        .setEntityType(EntityType.ACCOUNT)
+                        .setExt("datetime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
+                        .setExt("ExceptionInfo", ExceptionInfo);
+                logger.info(event.getExt("datetime"));
+                logger.info(event.getExt("ExceptionInfo"));
+                eventProducer.fireEvent(event);
                 return ToutiaoUtil.getJSONString(-1, map);
             }
         } catch (Exception e) {

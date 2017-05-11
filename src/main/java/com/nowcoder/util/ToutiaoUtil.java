@@ -17,6 +17,9 @@ public class ToutiaoUtil {
     private static final String[] ALLOWED_IMAGE_FORMATS = new String[] {"jpg", "jpeg", "png"};
     public static final String IMAGE_DIR = "/Users/Chen/Downloads/temp/toutiaoImage/";
     public static final String TOUTIAO_DOMAIN = "http://127.0.0.1:8080/";
+    public static final int SYSTEM_UID = 24;
+    public static final String NEWS_URL_HEAD = "http://127.0.0.1:8080/news/";
+    public static final String TEST_MAIL = "imcheney@qq.com";
     /**
      * 把运行结果的code做成json返回
      * 0: ok, 其他: 有问题

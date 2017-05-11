@@ -47,7 +47,7 @@ public class LikeController {
             eventProducer.fireEvent(new EventModel(EventType.LIKE).setActorId(hostHolder.getUser().getUid())
                     .setEntityOwnerId(newsService.getNewsByNid(nid).getUid())
                     .setEntityId(nid).setEntityType(EntityType.NEWS));
-
+            logger.info("userid = " + hostHolder.getUser().getUid());
             return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
         } catch (Exception e) {
             logger.error("like添加失败" + e.getMessage());

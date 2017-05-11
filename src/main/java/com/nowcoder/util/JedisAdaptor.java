@@ -273,11 +273,14 @@ public class JedisAdaptor implements InitializingBean {
         }
     }
 
+    //TODO: 方法无法push进入redis, 需要检查
     public long lpush(String key, String value) {
         Jedis jedis = null;
         try {
             jedis = getJedis();
-            return jedis.lpush(key, value);
+            long result = jedis.lpush(key, value);
+            logger.info("result: " + result);
+            return result;
         } catch (Exception e) {
             logger.error("lpush error..." + e.getMessage());
             return -1;

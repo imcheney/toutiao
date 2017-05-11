@@ -21,6 +21,15 @@ public class EventModel {
     public EventModel() {
     }
 
+    //漏掉getExts会导致JsonObject.toJsonString方法无法把exts这个map成员属性转换成json string的一部分;
+    public Map<String, String> getExts() {
+        return exts;
+    }
+
+    public void setExts(Map<String, String> exts) {
+        this.exts = exts;
+    }
+
     public String getExt(String key) {
         return exts.get(key);
     }

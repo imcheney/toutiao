@@ -75,19 +75,24 @@ public class UserService {
     public Map<String, Object> login(String username, String password) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringUtils.isBlank(username)) {
+            map.put("msgType", "msgUsername");
             map.put("msgUsername", "用户名不能为空");
             return map;
         }
+        User user = userDao.selectByUsername(username);
+        map.put("uid", user.getUid());
         if (StringUtils.isBlank(password)) {
+            map.put("msgType", "msgPassword");
             map.put("msgPassword", "密码不能为空");
             return map;
         }
-        User user = userDao.selectByUsername(username);
         if (user== null) {
+            map.put("msgType", "msgUsername");
             map.put("msgUsername", "用户名不存在");
             return map;
         }
         if (!ToutiaoUtil.MD5(password + user.getSalt()).equals(user.getPassword())) {  //check if password match
+            map.put("msgType", "msgPassword");
             map.put("msgPassword", "密码错误");
             return map;
         }

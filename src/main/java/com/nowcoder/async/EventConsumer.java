@@ -50,7 +50,10 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware{
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                int count = 0;
                 while (true) {
+                    count++;
+                    logger.info("count: " + count);
                     String key = RedisKeyUtil.getEventQueueKey();
                     List<String> messages = jedisAdaptor.brpop(0, key);
                     for (String msg:messages) {
@@ -61,6 +64,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware{
                             logger.error("No such eventType found!");
                             continue;
                         }
+                        System.out.println("=====event consumer====: " + event.getExt("datetime"));
                         for (EventHandler handler:config.get(eventType)) {
                             handler.doHandle(event);
                         }
