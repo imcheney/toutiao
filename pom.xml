@@ -5,8 +5,8 @@
 
 	<groupId>com.nowcoder</groupId>
 	<artifactId>toutiao</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>0.1.2-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>toutiao</name>
 	<description>Demo project for Spring Boot</description>
@@ -86,6 +86,13 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
+
+        <!--only open this when deploying-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+			<!--<scope>provided</scope>-->
+		<!--</dependency>-->
 
 	</dependencies>
 

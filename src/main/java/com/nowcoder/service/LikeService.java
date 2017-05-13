@@ -53,5 +53,11 @@ public class LikeService {
         return jedisAdaptor.scard(likeKey);  //无论添加like or dislike, 返回在页面上显示的都是likeCount
     }
 
+    public void removeLike(int uid, int entityType, int entityId) {
+        jedisAdaptor.srem(RedisKeyUtil.getLikeKey(entityType, entityId), String.valueOf(uid));
+    }
 
+    public void removeDislike(int uid, int entityType, int entityId) {
+        jedisAdaptor.srem(RedisKeyUtil.getDislikeKey(entityType, entityId), String.valueOf(uid));
+    }
 }

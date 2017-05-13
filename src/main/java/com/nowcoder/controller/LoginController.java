@@ -93,7 +93,7 @@ public class LoginController {
                         .setExt("ExceptionInfo", ExceptionInfo);
                 logger.info(event.getExt("datetime"));
                 logger.info(event.getExt("ExceptionInfo"));
-                eventProducer.fireEvent(event);
+                eventProducer.fireEvent(event);  //有一个常驻的consumer线程来负责分发这些event;
                 return ToutiaoUtil.getJSONString(-1, map);
             }
         } catch (Exception e) {

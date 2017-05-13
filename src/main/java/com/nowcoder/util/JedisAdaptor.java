@@ -173,7 +173,7 @@ public class JedisAdaptor implements InitializingBean {
         Jedis jedis = null;  //函数栈中的jedis数据库线程
         try {
             jedis = getJedis();
-            return jedis.srem(set, member);
+            return jedis.srem(set, member);  //note: 如果根本没有这个member, 那么返回的是0, 0代表remove了0个元素
         } catch (Exception e) {
             logger.error("srem发生异常" + e.getMessage());
             e.printStackTrace();
