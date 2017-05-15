@@ -35,113 +35,114 @@ public class JedisAdaptor implements InitializingBean {
         System.out.println(String.format("%d, %s", index, obj));
     }
 
-    public static void main(String[] args) {
-        System.out.println("========================BASIC=======================");
-        Jedis jedis = new Jedis();
-        jedis.flushAll();  //delete all data
-        jedis.set("hello", "world");
-        print(1, jedis.get("hello"));
-        jedis.rename("hello", "yello");
-        print(1, jedis.get("yello"));
-        //验证码等时效性临时数据场景, 可以使用setex, ttl等来做
-        jedis.setex("valid", 15, "test123");
-        print(2, jedis.ttl("valid"));
-        jedis.set("pv", "100");
-        jedis.incr("pv");
-        print(2, jedis.get("pv"));
-        jedis.incrBy("pv", 10);
-        print(2, jedis.get("pv"));
-        //pv等的高并发策略
-        //pv的更新放在内存里面做, 每次来一个请求就pv++, 或者用jedis.incr("pv")
-        //每隔一秒update一次关系型数据库进行持久化. 用户读取PV从关系数据库中读.
-
-        /*list*/
-        System.out.println("====================LIST=========================");
-        String lista = "lista";
-        for (int i = 0; i < 10; i++) {
-            jedis.rpush(lista, "a" + i);
-        }
-        print(3, jedis.lrange(lista, 0, -1));
-        print(4, jedis.llen(lista));
-        print(5, jedis.lpop(lista));
-        print(6, jedis.lindex(lista, 3));
-        print(7, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test1"));
-        print(8, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test0"));
-        print(9, jedis.lrange(lista, 0, -1));
-
-        /*hash*/
-        System.out.println("-------hash--------------------");
-        String myUser = "user01";
-        jedis.hset(myUser, "username", "TomBlue");
-        jedis.hset(myUser, "password", "123456");
-        jedis.hset(myUser, "age", "23");
-        jedis.hset(myUser, "addr", "Beijing Haidian");
-        print(1, jedis.hgetAll(myUser));
-        print(2, jedis.hexists(myUser, "addr"));
-        print(2, jedis.hexists(myUser, "phone"));
-        print(3, jedis.hdel(myUser, "age"));
-        print(4, jedis.hkeys(myUser));
-        print(4, jedis.hvals(myUser));
-        print(5, jedis.hsetnx(myUser, "addr", "Shanghai"));
-        print(6, jedis.hsetnx(myUser, "sex", "Male"));
-        print(7, jedis.hgetAll(myUser));
-
-        /*set*/
-        System.out.println("================SET===============");
-        String s1 = "set01", s2 = "set02";
-        for (int i = 1; i <= 5; i++) {
-            jedis.sadd(s1, i + "");
-            jedis.sadd(s2, i * i + "");
-        }
-        print(1, jedis.smembers(s1));
-        print(1, jedis.smembers(s2));
-        print(2, jedis.sinter(s1, s2));
-        print(2, jedis.sunion(s1, s2));
-        print(2, jedis.sdiff(s1, s2));  //s1-s2
-        print(2, jedis.sdiff(s2, s1));  //s2-s1
-        print(3, jedis.sismember(s1, "5"));
-        print(3, jedis.scard(s1));
-        print(4, jedis.srem(s1, "5"));
-        print(5, jedis.scard(s1));
-        print(5, jedis.sismember(s1, "5"));
-        print(6, jedis.smembers(s1));
-
-        /*优先队列*/
-        System.out.println("=========sorted set=============");
-        String pq = "pq";
-        jedis.zadd(pq, 80, "Liuling");
-        jedis.zadd(pq, 75, "Haifeng");
-        jedis.zadd(pq, 60, "Qingqing");
-        jedis.zadd(pq, 85, "Chenwei");
-        jedis.zadd(pq, 82, "Alison");
-        print(1, jedis.zcard(pq));
-        print(2, jedis.zcount(pq, 80, 90));
-        print(3, jedis.zscore(pq, "Alison"));
-        print(4, jedis.zincrby(pq, 2, "Alison"));
-        print(5, jedis.zrange(pq, 0, 2));
-        print(5, jedis.zrevrange(pq, 1, 2));
-        print(5, jedis.zrank(pq, "Alison"));
-        print(5, jedis.zrevrank(pq, "Alison"));
-        //THIS IS SPECIAL
-        for (Tuple tuple : jedis.zrangeByScoreWithScores(pq, 80, 90)) {
-            print(6, tuple.getElement() + ": " + tuple.getScore());
-        }
-
-        /* jedis pool*/
-        System.out.println("================POOL===============");
-        JedisPool pool = new JedisPool();
-        for (int i = 0; i < 100; i++) {
-            Jedis j = pool.getResource();
-            j.get("a");
-            System.out.println("POOL" + i);
-            j.close();
-        }
-    }
+//    public static void main(String[] args) {
+//        System.out.println("========================BASIC=======================");
+//        Jedis jedis = new Jedis();
+//        jedis.flushAll();  //delete all data
+//        jedis.set("hello", "world");
+//        print(1, jedis.get("hello"));
+//        jedis.rename("hello", "yello");
+//        print(1, jedis.get("yello"));
+//        //验证码等时效性临时数据场景, 可以使用setex, ttl等来做
+//        jedis.setex("valid", 15, "test123");
+//        print(2, jedis.ttl("valid"));
+//        jedis.set("pv", "100");
+//        jedis.incr("pv");
+//        print(2, jedis.get("pv"));
+//        jedis.incrBy("pv", 10);
+//        print(2, jedis.get("pv"));
+//        //pv等的高并发策略
+//        //pv的更新放在内存里面做, 每次来一个请求就pv++, 或者用jedis.incr("pv")
+//        //每隔一秒update一次关系型数据库进行持久化. 用户读取PV从关系数据库中读.
+//
+//        /*list*/
+//        System.out.println("====================LIST=========================");
+//        String lista = "lista";
+//        for (int i = 0; i < 10; i++) {
+//            jedis.rpush(lista, "a" + i);
+//        }
+//        print(3, jedis.lrange(lista, 0, -1));
+//        print(4, jedis.llen(lista));
+//        print(5, jedis.lpop(lista));
+//        print(6, jedis.lindex(lista, 3));
+//        print(7, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test1"));
+//        print(8, jedis.linsert(lista, BinaryClient.LIST_POSITION.AFTER, "a7", "test0"));
+//        print(9, jedis.lrange(lista, 0, -1));
+//
+//        /*hash*/
+//        System.out.println("-------hash--------------------");
+//        String myUser = "user01";
+//        jedis.hset(myUser, "username", "TomBlue");
+//        jedis.hset(myUser, "password", "123456");
+//        jedis.hset(myUser, "age", "23");
+//        jedis.hset(myUser, "addr", "Beijing Haidian");
+//        print(1, jedis.hgetAll(myUser));
+//        print(2, jedis.hexists(myUser, "addr"));
+//        print(2, jedis.hexists(myUser, "phone"));
+//        print(3, jedis.hdel(myUser, "age"));
+//        print(4, jedis.hkeys(myUser));
+//        print(4, jedis.hvals(myUser));
+//        print(5, jedis.hsetnx(myUser, "addr", "Shanghai"));
+//        print(6, jedis.hsetnx(myUser, "sex", "Male"));
+//        print(7, jedis.hgetAll(myUser));
+//
+//        /*set*/
+//        System.out.println("================SET===============");
+//        String s1 = "set01", s2 = "set02";
+//        for (int i = 1; i <= 5; i++) {
+//            jedis.sadd(s1, i + "");
+//            jedis.sadd(s2, i * i + "");
+//        }
+//        print(1, jedis.smembers(s1));
+//        print(1, jedis.smembers(s2));
+//        print(2, jedis.sinter(s1, s2));
+//        print(2, jedis.sunion(s1, s2));
+//        print(2, jedis.sdiff(s1, s2));  //s1-s2
+//        print(2, jedis.sdiff(s2, s1));  //s2-s1
+//        print(3, jedis.sismember(s1, "5"));
+//        print(3, jedis.scard(s1));
+//        print(4, jedis.srem(s1, "5"));
+//        print(5, jedis.scard(s1));
+//        print(5, jedis.sismember(s1, "5"));
+//        print(6, jedis.smembers(s1));
+//
+//        /*优先队列*/
+//        System.out.println("=========sorted set=============");
+//        String pq = "pq";
+//        jedis.zadd(pq, 80, "Liuling");
+//        jedis.zadd(pq, 75, "Haifeng");
+//        jedis.zadd(pq, 60, "Qingqing");
+//        jedis.zadd(pq, 85, "Chenwei");
+//        jedis.zadd(pq, 82, "Alison");
+//        print(1, jedis.zcard(pq));
+//        print(2, jedis.zcount(pq, 80, 90));
+//        print(3, jedis.zscore(pq, "Alison"));
+//        print(4, jedis.zincrby(pq, 2, "Alison"));
+//        print(5, jedis.zrange(pq, 0, 2));
+//        print(5, jedis.zrevrange(pq, 1, 2));
+//        print(5, jedis.zrank(pq, "Alison"));
+//        print(5, jedis.zrevrank(pq, "Alison"));
+//        //THIS IS SPECIAL
+//        for (Tuple tuple : jedis.zrangeByScoreWithScores(pq, 80, 90)) {
+//            print(6, tuple.getElement() + ": " + tuple.getScore());
+//        }
+//
+//        /* jedis pool*/
+//        System.out.println("================POOL===============");
+//        JedisPool pool = new JedisPool();
+//        for (int i = 0; i < 100; i++) {
+//            Jedis j = pool.getResource();
+//            j.get("a");
+//            System.out.println("POOL" + i);
+//            j.close();
+//        }
+//    }
 
     /*配置线程池*/
+    //凡是数据库都要配置, redis也不例外.  它通过端口6379提供服务
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("localhost", 6379);
+        pool = new JedisPool("127.0.0.1", 6379);
     }
 
     /**

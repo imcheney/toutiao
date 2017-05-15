@@ -11,8 +11,8 @@
             'click .js-share': fClickShare
         },
         events: {
-            'click button.click-like': fClickLike,
-            'click button.click-dislike': fClickDisLike
+            'click .click-like': fLike,
+            'click .click-dislike': fDislike
         }
     });
 
@@ -48,7 +48,7 @@
         });
     }
 
-    function fClickLike(oEvent) {
+    function fLike(oEvent) {
         var that = this;
         var oEl = $(oEvent.currentTarget);
         var sId = $.trim(oEl.attr('data-id'));
@@ -58,7 +58,7 @@
         }
         that.actioning = true;
         ActionUtil.like({
-            newsId: sId,
+            nid: sId,
             call: function (oResult) {
                 oEl.find('span.count').html(oResult.msg);
                 oEl.addClass('pressed');
@@ -73,7 +73,7 @@
         });
     }
 
-    function fClickDisLike(oEvent) {
+    function fDislike(oEvent) {
         var that = this;
         var oEl = $(oEvent.currentTarget);
         var sId = $.trim(oEl.attr('data-id'));
@@ -83,7 +83,7 @@
         }
         that.actioning = true;
         ActionUtil.dislike({
-            newsId: sId,
+            nid: sId,
             call: function (oResult) {
                 oEl.addClass('pressed');
                 var oLikeBtn = oEl.parent().find('.click-like');
