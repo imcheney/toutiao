@@ -1,7 +1,10 @@
 package com.nowcoder.service;
 
+import com.nowcoder.controller.LikeController;
 import com.nowcoder.util.JedisAdaptor;
 import com.nowcoder.util.RedisKeyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LikeService {
+
+    private static final Logger logger = LoggerFactory.getLogger(LikeController.class);
     @Autowired
     JedisAdaptor jedisAdaptor;
 
@@ -26,7 +31,7 @@ public class LikeService {
         if (jedisAdaptor.sismember(likeKey, String.valueOf(uid))) {  //uid in set(LIKE:1:nid)
             return 1;
         }
-        String dislikeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
+        String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId);
         if (jedisAdaptor.sismember(dislikeKey, String.valueOf(uid))) {
             return -1;
         }
@@ -36,20 +41,20 @@ public class LikeService {
     public long addLike(int uid, int entityType, int entityId) {
         String likeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
         try {
-            long res = jedisAdaptor.sadd(likeKey, String.valueOf(uid));
+            long res = jedisAdaptor.sadd(likeKey, String.valueOf(uid));  //添加likeKey
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId);
+        String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId); //删除dislikeKey
         jedisAdaptor.srem(dislikeKey, String.valueOf(uid));
-        return jedisAdaptor.scard(likeKey);
+        return jedisAdaptor.scard(likeKey);  //返回likeCount
     }
 
     public long addDislike(int uid, int entityType, int entityId) {
         String likeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
-        String dislikeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
+        String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId);  //添加dislikeKey
         long res = jedisAdaptor.sadd(dislikeKey, String.valueOf(uid));
-        jedisAdaptor.srem(likeKey, String.valueOf(uid));
+        jedisAdaptor.srem(likeKey, String.valueOf(uid));  //删除喜欢
         return jedisAdaptor.scard(likeKey);  //无论添加like or dislike, 返回在页面上显示的都是likeCount
     }
 

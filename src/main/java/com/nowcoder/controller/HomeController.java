@@ -1,12 +1,16 @@
 package com.nowcoder.controller;
 
 import com.nowcoder.dao.UserDao;
+import com.nowcoder.model.HostHolder;
 import com.nowcoder.model.News;
+import com.nowcoder.model.User;
 import com.nowcoder.model.ViewObject;
 import com.nowcoder.service.LikeService;
 import com.nowcoder.service.NewsService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.EntityType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +28,8 @@ import java.util.List;
  */
 @Controller
 public class HomeController {
+    private static final Logger logger = LoggerFactory.getLogger(LikeController.class);
+
     @Autowired
     UserService userService;
 
@@ -33,15 +39,24 @@ public class HomeController {
     @Autowired
     LikeService likeService;
 
+    @Autowired
+    HostHolder hostHolder;
+
     private List<ViewObject> getNews(int uid, int offset, int limit) {
         List<News> newsList = newsService.getLatestNews(uid, offset, limit);
         List<ViewObject> vos = new ArrayList<ViewObject>();
+        int localUserId = hostHolder.getUser()!=null? hostHolder.getUser().getUid() : -1;
         for (News aNews:newsList) {
             ViewObject vo = new ViewObject();
             vo.set("news", aNews);
             vo.set("user", userService.getUser(aNews.getUid()));
-            int likeStatus = likeService.getLikeStatus(uid, EntityType.NEWS, aNews.getNid());
-            vo.set("like", likeStatus);
+            if (localUserId!=-1){  //用户已经登录
+                int likeStatus = likeService.getLikeStatus(localUserId, EntityType.NEWS, aNews.getNid());
+                vo.set("like", likeStatus);  //设置喜好状态
+                logger.info("已经设置好了like的状态信息, like value: " + likeStatus);
+            } else {
+                vo.set("like", 0);  //0为无喜好
+            }
             vos.add(vo);
         }
         return vos;

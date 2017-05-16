@@ -237,7 +237,7 @@ public class JedisAdaptor implements InitializingBean {
             jedis = getJedis();
             return jedis.get(key);
         } catch (Exception e) {
-            logger.error("set error..." + e.getMessage());
+            logger.error("get error..." + e.getMessage());
             return null;
         } finally {
             if (jedis != null) {
@@ -280,7 +280,7 @@ public class JedisAdaptor implements InitializingBean {
         try {
             jedis = getJedis();
             long result = jedis.lpush(key, value);
-            logger.info("result: " + result);
+            logger.info("jedis.lpush result: " + result);
             return result;
         } catch (Exception e) {
             logger.error("lpush error..." + e.getMessage());

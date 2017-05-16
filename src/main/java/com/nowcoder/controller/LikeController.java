@@ -40,14 +40,13 @@ public class LikeController {
     public String like(@RequestParam("nid") int nid) {
         try {
             int uid = hostHolder.getUser().getUid();
-            long likeCount = likeService.addLike(uid, EntityType.NEWS, nid);
-            logger.info("likeCount: " + likeCount);
-            newsService.updateLikeCount((int)likeCount, nid);
+            int likeCount = (int)likeService.addLike(uid, EntityType.NEWS, nid);
+            newsService.updateLikeCount(likeCount, nid);
 
             eventProducer.fireEvent(new EventModel(EventType.LIKE).setActorId(hostHolder.getUser().getUid())
                     .setEntityOwnerId(newsService.getNewsByNid(nid).getUid())
-                    .setEntityId(nid).setEntityType(EntityType.NEWS));
-            logger.info("userid = " + hostHolder.getUser().getUid());
+                    .setEntityId(nid).setEntityType(EntityType.NEWS));  //有人点赞的时候, 才发送一个站内信;
+
             return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
         } catch (Exception e) {
             logger.error("like添加失败" + e.getMessage());

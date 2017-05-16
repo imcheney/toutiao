@@ -80,7 +80,6 @@ public class MessageController {
             int localUid = hostHolder.getUser().getUid();
             List<Message> convList = messageService.getConversationList(localUid, 0, 10);
             List<ViewObject> convVos = new ArrayList<ViewObject>();
-            System.out.println("size: " + convList.size());
 
             for (Message conv:convList) {
                 ViewObject vo = new ViewObject();

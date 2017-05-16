@@ -64,7 +64,6 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware{
                             logger.error("No such eventType found!");
                             continue;
                         }
-                        System.out.println("=====event consumer====: " + event.getExt("datetime"));
                         for (EventHandler handler:config.get(eventType)) {
                             handler.doHandle(event);
                         }
