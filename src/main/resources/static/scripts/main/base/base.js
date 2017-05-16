@@ -48,7 +48,7 @@
                 });
             });
             // 代理的事件
-            $.each(oClass.events, function (sCbName, sEventName) {
+            $.each(oClass.events, function (sEventName, sCbName) {
                 var aMatch = sEventName.match(/^(\S+)\s*(.*)$/);
                 var sEvent = aMatch[1];
                 var sSelector = aMatch[2];
@@ -133,15 +133,18 @@
         var Class;
         try {
             var sNamespace = sClassName ? (sPackage + '.' + sClassName) : sPackage;
+            console.log(sNamespace)
             var aName = sNamespace.split('.');
             var oParent = window;
-
+            console.log(oParent)
             for (var i = 0, l = aName.length; i < l; i++) {
                 var sName = aName[i];
-                if (i + 1 === l) {
+                console.log('sname' + sName);
+                if (i + 1 === l && typeof(oParent[sName])!='undefined') {  //最后一个部分main.util.Action = Action
                     Class = oParent[sName];
+                    console.log(Class)
                 } else {
-                    oParent = oParent[sName];
+                    oParent = oParent[sName];  //oParent = oParent[main], oParent[util]
                 }
             }
             if (!Class) {

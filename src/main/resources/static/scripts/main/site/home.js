@@ -1,7 +1,7 @@
 (function (window, undefined) {
     var PopupLogin = Base.getClass('main.component.PopupLogin');
     var PopupUpload = Base.getClass('main.component.PopupUpload');
-    
+    var ActionUtil = Base.getClass('main.util.Action');
 
     Base.ready({
         initialize: fInitialize,
@@ -11,10 +11,18 @@
             'click .js-share': fClickShare
         },
         events: {
-            'click button.click-like': fClickLike,
-            'click button.click-dislike': fClickDisLike
+            'click .click-like': fClickLike,
+            'click .click-dislike': fClickDisLike
         }
     });
+
+    function test1() {
+        alert("you click like!");
+    }
+
+    function test2() {
+        alert("you click dislike!");
+    }
 
     function fInitialize() {
         if (window.loginpop > 0) {
