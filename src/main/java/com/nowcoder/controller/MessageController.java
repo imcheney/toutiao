@@ -87,11 +87,13 @@ public class MessageController {
                 vo.set("unreadCount", messageService.getUnreadCount(conv.getConversationId()));
                 User anotherUser = userService.getUser(conv.getFromUid()==localUid?conv.getToUid():conv.getFromUid());
                 vo.set("anotherUser", anotherUser);
+//                System.out.println("anotherUser: " + anotherUser.getUsername());
                 convVos.add(vo);
                 System.out.println(String.format("%d", conv.getMsgid()));
             }
             model.addAttribute("convVos", convVos);
         } catch (Exception e) {
+//            e.printStackTrace();
             logger.error("查询conversation list失败" + e.getMessage());
         }
         return "letter";

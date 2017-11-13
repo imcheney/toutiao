@@ -4,7 +4,7 @@
             <ul class="letter-chatlist">
                 #foreach($vo in $messageVos)
                 <li id="msg-item-4009580">
-                    <a class="list-head" href="/user/${vo.fromUser.uid}">
+                    <a class="list-head" href="/user/$!{vo.fromUser.uid}">
                         <!--<div>${vo.fromUser.username}+${vo.fromUser.uid}</div>-->
                         <img alt="头像" src="$!{vo.fromUser.headUrl}">
                     </a>

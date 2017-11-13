@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>myDatabase</string>
+			<key>host</key>
+			<string>127.0.0.1</string>
+			<key>kcid</key>
+			<string>-585092702370917487</string>
+			<key>name</key>
+			<string>127.0.0.1</string>
+			<key>port</key>
+			<integer>3306</integer>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>root</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8</string>
+			<key>contentFilter</key>
+			<dict/>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClVtc2dpZNIeHy0uXxAP
+			TlNNdXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0
+			YWJsZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVk
+			QXJjaGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIA
+			WgBlAGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDF
+			AMoA1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEwATUBRwFLAVQB
+			WQFoAWwBdAF5AXwBjgGRAZYAAAAAAAACAQAAAAAAAAA6AAAAAAAA
+			AAAAAAAAAAABmA==
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {818, 475}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>create table toutiao_news (
+    nid int PRIMARY KEY AUTO_INCREMENT, 
+    title varchar(64), 
+    link varchar(128), 
+    image varchar(128), 
+    like_count int, 
+    comment_count int, 
+    created_date datetime, 
+    uid int
+);
+
+create table toutiao_user(
+    uid int primary key auto_increment, 
+    username varchar(32), 
+    password varchar(32), 
+    salt char(16), 
+    head_url varchar(128)
+);
+
+create table toutiao_loginTicket(
+    tid int primary key auto_increment, 
+    uid int, 
+    ticket varchar(64), 
+    expired datetime, 
+    status int
+);
+
+create table toutiao_message(
+	msgid int primary key auto_increment,
+    from_uid int, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id varchar(64)
+);
+
+create table toutiao_comment(
+    cid int primary key auto_increment,
+    uid int, 
+    entity_id int, 
+    entity_type int, 
+    content varchar(256), 
+    created_date datetime, 
+    status int
+);
+</string>
+			<key>table</key>
+			<string>toutiao_message</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>214</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>create table toutiao_message(
+	msgid int primary key auto_increment,
+    from_uid int, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id varchar(64)
+)</string>
+		<string>drop table toutiao_message</string>
+		<string>create table toutiao_message(
+    from_uid int primary key auto_increment, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id varchar(64)
+)</string>
+		<string>create table toutiao_comment(
+    cid int primary key auto_increment,
+    uid int, 
+    entity_id int, 
+    entity_type int, 
+    content varchar(256), 
+    created_date datetime, 
+    status int
+)</string>
+		<string>drop table toutiao_comment</string>
+		<string>create table toutiao_message(
+	msgid int primary key auto_increment,
+    from_uid int, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id int
+)</string>
+		<string>create table toutiao_loginTicket(
+    tid int primary key auto_increment, 
+    uid int, 
+    ticket varchar(64), 
+    expired datetime, 
+    status int
+)</string>
+		<string>drop table toutiao_loginTicket</string>
+		<string>create table toutiao_user(
+    uid int primary key auto_increment, 
+    username varchar(32), 
+    password varchar(32), 
+    salt char(16), 
+    head_url varchar(128)
+)</string>
+		<string>drop table toutiao_user</string>
+		<string>create table toutiao_news (
+    nid int PRIMARY KEY AUTO_INCREMENT, 
+    title varchar(64), 
+    link varchar(128), 
+    image varchar(128), 
+    like_count int, 
+    comment_count int, 
+    created_date datetime, 
+    uid int
+)</string>
+		<string>drop table toutiao_news</string>
+		<string>create table toutiao_message(
+    from_uid int primary key auto_increment, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id int
+)</string>
+		<string>create table toutiao_comment(
+    cid int,
+    uid int, 
+    entity_id int, 
+    entity_type int, 
+    content varchar(256), 
+    created_date datetime, 
+    status int
+)</string>
+		<string>create table toutiao_message(
+    from_uid int, 
+    to_uid int, 
+    content varchar(256), 
+    has_read int, 
+    created_date datetime, 
+    conversation_id int
+)</string>
+		<string>create table toutiao_loginTicket(
+    tid int, 
+    uid int, 
+    ticket varchar(64), 
+    expired datetime, 
+    status int
+)</string>
+		<string>create table toutiao_user(
+    uid int, 
+    username varchar(32), 
+    password varchar(32), 
+    salt char(16), 
+    head_url varchar(128)
+)</string>
+		<string>create table toutiao_news (
+    nid int, 
+    title varchar(64), 
+    link varchar(128), 
+    image varchar(128), 
+    like_count int, 
+    comment_count int, 
+    created_date datetime, 
+    uid int
+)</string>
+		<string>insert into student01(sid, sname, age) values(1006, Ford, 52)</string>
+		<string>select * from student01</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.7.20</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>
