@@ -13,7 +13,6 @@ toutiao项目展示了一个SpringBoot复杂项目的方方面面的要素, 非�
 - 事件的处理: async部分的事件机制, 类似订阅者模式
 
 #二. 怎么用
-
 ##0. 软件环境
 Linux或者MacOS最好, Windows也可以;
 Java1.9;
