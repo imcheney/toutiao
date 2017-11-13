@@ -62,11 +62,11 @@
 			<version>1.2.31</version>
 		</dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <version>1.3.8.RELEASE</version>   <!--debug中发现这个部分版本需要也保持是1.3.8-->
-        </dependency>
+        <!--<dependency>-->   <!--建议禁用这个dependency, 否则老是会出restarter错误-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<version>1.3.8.RELEASE</version>   &lt;!&ndash;debug中发现这个部分版本需要也保持是1.3.8&ndash;&gt;-->
+        <!--</dependency>-->
 
 		<dependency>
 			<groupId>com.qiniu</groupId>
