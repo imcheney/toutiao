@@ -142,7 +142,7 @@ public class JedisAdaptor implements InitializingBean {
     //凡是数据库都要配置, redis也不例外.  它通过端口6379提供服务
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("127.0.0.1", 6379);
+        pool = new JedisPool(ToutiaoUtil.REDIS_SERVER, 6379);
     }
 
     /**

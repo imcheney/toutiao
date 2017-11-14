@@ -5,8 +5,8 @@
 
 	<groupId>com.nowcoder</groupId>
 	<artifactId>toutiao</artifactId>
-	<version>0.2</version>
-	<packaging>war</packaging>
+	<version>0.7</version>
+	<packaging>jar</packaging>
 
 	<name>toutiao</name>
 	<description>Demo project for Spring Boot</description>
@@ -62,10 +62,12 @@
 			<version>1.2.31</version>
 		</dependency>
 
-        <!--<dependency>-->   <!--建议禁用这个dependency, 否则老是会出restarter错误-->
+		<!--建议禁用这个dependency, 否则老是会出restarter错误-->
+        <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<version>1.3.8.RELEASE</version>   &lt;!&ndash;debug中发现这个部分版本需要也保持是1.3.8&ndash;&gt;-->
+            <!--&lt;!&ndash;debug中发现这个部分版本需要也保持是1.3.8&ndash;&gt;-->
+            <!--<version>1.3.8.RELEASE</version>-->
         <!--</dependency>-->
 
 		<dependency>
@@ -89,30 +91,30 @@
 
         <!--only open this when deploying-->
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<!--<scope>provided</scope>-->   <!--scope应该被注释掉-->
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+			<!--<scope>provided</scope>   &lt;!&ndash;scope应该被注释掉&ndash;&gt;-->
+		<!--</dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 移除嵌入式tomcat插件 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-web</artifactId>-->
+            <!--&lt;!&ndash; 移除嵌入式tomcat插件 &ndash;&gt;-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.springframework.boot</groupId>-->
+                    <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>javax.servlet</groupId>-->
+            <!--<artifactId>javax.servlet-api</artifactId>-->
+            <!--<version>3.1.0</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
 	</dependencies>
 

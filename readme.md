@@ -80,9 +80,12 @@ spring.datasource.url=jdbc:mysql://127.0.0.1:3306/myDatabase?useUnicode=true&cha
 spring.datasource.username=root
 spring.datasource.password=root
 
+
+
 ##3. Redis配置
 本机安装Redis, MacOS可以使用brew install redis;
 安装好, 请运行/usr/local/Cellar/redis/4.0.2/bin/redis-server, 它会启动一个redis-server后台服务, 让我们可以通过端口localhost:6379对redis数据库进行操作.
+配置好ToutiaoUtil中的REDIS_SERVER部分
 
 ##4. 使用Intellij Idea试运行
 可能出现的问题:

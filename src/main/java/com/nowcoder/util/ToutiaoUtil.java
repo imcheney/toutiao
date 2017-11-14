@@ -20,6 +20,7 @@ public class ToutiaoUtil {
     public static final int SYSTEM_UID = 1;
     public static final String NEWS_URL_HEAD = "http://127.0.0.1:8080/news/";
     public static final String TEST_MAIL = "imcheney@qq.com";
+    public static final String REDIS_SERVER = "47.93.4.41";
     /**
      * 把运行结果的code做成json返回
      * 0: ok, 其他: 有问题
